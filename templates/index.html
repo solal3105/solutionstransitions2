@@ -26,6 +26,10 @@
     .chat-message-user { margin-bottom:0.5rem; }
     .chat-message-user strong { color:#1a4b82; }
     .chat-message-assistant { margin-bottom:0.9rem; }
+    .assistant-content { margin-top:0.25rem; line-height:1.6; }
+    .assistant-content h3 { margin:0.4rem 0 0.2rem; font-size:0.95rem; }
+    .assistant-content p { margin:0.2rem 0; }
+    .assistant-content ul, .assistant-content ol { margin:0.2rem 0 0.2rem 1.2rem; }
     #chat-input-row { display:flex; gap:0.5rem; }
     #chat-input { flex:1; padding:0.5rem; border-radius:4px; border:1px solid #ccc; font-family:inherit; }
     #chat-send { padding:0.5rem 0.9rem; border-radius:4px; border:none; background:#1a4b82; color:#fff; cursor:pointer; font-family:inherit; }
@@ -209,7 +213,16 @@
 
           const assistantDiv = document.createElement('div');
           assistantDiv.className = 'chat-message-assistant';
-          assistantDiv.innerHTML = '<strong>Assistant :</strong> ' + (data.answer || '(pas de réponse)');
+
+          const titleSpan = document.createElement('div');
+          titleSpan.innerHTML = '<strong>Assistant :</strong>';
+          assistantDiv.appendChild(titleSpan);
+
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'assistant-content';
+          contentDiv.innerHTML = renderMarkdownToHtml(data.answer || '(pas de réponse)');
+          assistantDiv.appendChild(contentDiv);
+
           log.appendChild(assistantDiv);
           log.scrollTop = log.scrollHeight;
 
@@ -237,6 +250,47 @@
         } catch (err) {
           sourcesDiv.textContent = 'Erreur : ' + err;
         }
+      }
+
+      function renderMarkdownToHtml(text) {
+        if (!text) return '';
+        // Échapper les caractères HTML de base
+        text = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        // Titres ###
+        text = text.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
+
+        // Gras **...**
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // Listes numérotées (1. ...)
+        text = text.replace(/^(\d+)\.\s+(.*)$/gm, '<li>$1. $2</li>');
+
+        // Listes à puces (- ...)
+        text = text.replace(/^\-\s+(.*)$/gm, '<li>$1</li>');
+
+        // Regrouper les <li> consécutifs dans des <ul>
+        text = text.replace(/(<li>[^<]*<\/li>\s*)+/g, function (match) {
+          return '<ul>' + match + '</ul>';
+        });
+
+        // Paragraphes / sauts de ligne
+        const lines = text.split(/\n+/);
+        const htmlParts = lines.map(function (line) {
+          if (!line.trim()) return '';
+          if (line.startsWith('<h3>') || line.startsWith('<ul>') || line.startsWith('<ol>')) {
+            return line;
+          }
+          if (line.startsWith('<li>')) {
+            return '<ul>' + line + '</ul>';
+          }
+          return '<p>' + line + '</p>';
+        }).filter(Boolean);
+
+        return htmlParts.join('\n');
       }
 
       sendBtn.addEventListener('click', sendMessage);
