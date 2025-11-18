@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Fiches & Ressources - Solutions Transitions (scrap)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 2rem; background:#f5f5f5; }
+    h1, h2, h3 { font-weight: 600; }
+    h1 { margin-bottom: 1.5rem; }
+    section { margin-bottom: 3rem; }
+    .doc-card { background:#fff; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 1rem; overflow: hidden; }
+    .doc-header { display:flex; flex-direction:column; padding: 0.9rem 1.2rem; cursor:pointer; background:#f0f4fa; }
+    .doc-header:hover { background:#e4edf9; }
+    .doc-title { margin:0; font-size:1rem; }
+    .doc-meta { font-size: 0.8rem; color:#666; margin-top:0.3rem; }
+    .doc-meta a { color:#1a4b82; text-decoration:none; }
+    .doc-body { padding: 0 1.2rem 1rem; display:none; }
+    .doc-body.open { display:block; }
+    .pdf-link { display:inline-block; margin:0.6rem 0 0.8rem; padding:0.3rem 0.7rem; border-radius:4px; background:#1a4b82; color:#fff; text-decoration:none; font-size:0.85rem; }
+    .pdf-link:hover { background:#163a63; }
+    p { line-height: 1.6; margin:0.25rem 0; }
+
+    /* Zone de chat */
+    #chat-container { margin: 1.5rem 0 3rem; padding: 1.5rem; background:#fff; border-radius:8px; border:1px solid #ddd; }
+    #chat-log { max-height: 260px; overflow-y:auto; margin-bottom:1rem; font-size:0.9rem; }
+    .chat-message-user { margin-bottom:0.5rem; }
+    .chat-message-user strong { color:#1a4b82; }
+    .chat-message-assistant { margin-bottom:0.9rem; }
+    #chat-input-row { display:flex; gap:0.5rem; }
+    #chat-input { flex:1; padding:0.5rem; border-radius:4px; border:1px solid #ccc; font-family:inherit; }
+    #chat-send { padding:0.5rem 0.9rem; border-radius:4px; border:none; background:#1a4b82; color:#fff; cursor:pointer; font-family:inherit; }
+    #chat-send:hover { background:#163a63; }
+    #chat-sources { margin-top:0.5rem; font-size:0.85rem; }
+    #chat-sources a { color:#1a4b82; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <h1>Solutions Transitions - Assistant & Ressources</h1>
+
+  <section id="chat">
+    <h2>Assistant IA (orientation vers les ressources)</h2>
+    <div id="chat-container">
+      <div id="chat-log"></div>
+      <div id="chat-input-row">
+        <input id="chat-input" type="text" placeholder="Posez votre question (ex : Comment financer la transition écologique ?)" />
+        <button id="chat-send">Envoyer</button>
+      </div>
+      <div id="chat-sources"></div>
+    </div>
+  </section>
+
+  <section id="home">
+    <h2>Page principale</h2>
+    {% if home %}
+      <article class="doc-card">
+        <header class="doc-header" data-target="home-page">
+          <h3 class="doc-title">{{ home.title }}</h3>
+          <div class="doc-meta">
+            Source : <a href="{{ home.url }}" target="_blank" rel="noopener">{{ home.url }}</a>
+          </div>
+        </header>
+        <div id="home-page" class="doc-body">
+          {% if home.paragraphs %}
+            {% for para in home.paragraphs %}
+              <p>{{ para }}</p>
+            {% endfor %}
+          {% elif home.resume %}
+            <p>{{ home.resume }}</p>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <p>Page principale non scrapée. Relance le scraper.</p>
+    {% endif %}
+  </section>
+
+  <section id="faq">
+    <h2>FAQ</h2>
+    {% if faq %}
+      <article class="doc-card">
+        <header class="doc-header" data-target="faq-page">
+          <h3 class="doc-title">{{ faq.title }}</h3>
+          <div class="doc-meta">
+            Source : <a href="{{ faq.url }}" target="_blank" rel="noopener">{{ faq.url }}</a>
+          </div>
+        </header>
+        <div id="faq-page" class="doc-body">
+          {% if faq.paragraphs %}
+            {% for para in faq.paragraphs %}
+              <p>{{ para }}</p>
+            {% endfor %}
+          {% elif faq.resume %}
+            <p>{{ faq.resume }}</p>
+          {% endif %}
+        </div>
+      </article>
+    {% else %}
+      <p>FAQ non scrappée. Relance le scraper.</p>
+    {% endif %}
+  </section>
+
+  <section id="fiches">
+    <h2>Fiches pratiques</h2>
+    {% if fiches %}
+      {% for fiche in fiches %}
+        <article class="doc-card">
+          <header class="doc-header" data-target="fiche-{{ loop.index }}">
+            <h3 class="doc-title">{{ fiche.title }}</h3>
+            <div class="doc-meta">
+              Source : <a href="{{ fiche.url }}" target="_blank" rel="noopener">{{ fiche.url }}</a>
+            </div>
+          </header>
+          <div id="fiche-{{ loop.index }}" class="doc-body">
+            {% if fiche.pdf_url %}
+              <a class="pdf-link" href="{{ fiche.pdf_url }}" target="_blank" rel="noopener">Télécharger la fiche (PDF)</a>
+            {% endif %}
+            {% if fiche.paragraphs %}
+              {% for para in fiche.paragraphs %}
+                <p>{{ para }}</p>
+              {% endfor %}
+            {% elif fiche.resume %}
+              <p>{{ fiche.resume }}</p>
+            {% else %}
+              <p>Aucun contenu détaillé trouvé pour cette fiche.</p>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    {% else %}
+      <p>Aucune fiche trouvée. Vérifie le fichier <code>doc/fiches.json</code>.</p>
+    {% endif %}
+  </section>
+
+  <section id="ressources">
+    <h2>Ressources</h2>
+    {% if ressources %}
+      {% for ressource in ressources %}
+        <article class="doc-card">
+          <header class="doc-header" data-target="ressource-{{ loop.index }}">
+            <h3 class="doc-title">{{ ressource.title }}</h3>
+            <div class="doc-meta">
+              Source : <a href="{{ ressource.url }}" target="_blank" rel="noopener">{{ ressource.url }}</a>
+            </div>
+          </header>
+          <div id="ressource-{{ loop.index }}" class="doc-body">
+            {% if ressource.pdf_url %}
+              <a class="pdf-link" href="{{ ressource.pdf_url }}" target="_blank" rel="noopener">Télécharger le document (PDF)</a>
+            {% endif %}
+            {% if ressource.paragraphs %}
+              {% for para in ressource.paragraphs %}
+                <p>{{ para }}</p>
+              {% endfor %}
+            {% elif ressource.resume %}
+              <p>{{ ressource.resume }}</p>
+            {% else %}
+              <p>Aucun contenu détaillé trouvé pour cette ressource.</p>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    {% else %}
+      <p>Aucune ressource trouvée. Vérifie le fichier <code>doc/ressources.json</code>.</p>
+    {% endif %}
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Accordéons
+      document.querySelectorAll('.doc-header').forEach(function (header) {
+        header.addEventListener('click', function () {
+          const targetId = header.getAttribute('data-target');
+          const body = document.getElementById(targetId);
+          if (!body) return;
+          body.classList.toggle('open');
+        });
+      });
+
+      // Chat IA
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send');
+      const log = document.getElementById('chat-log');
+      const sourcesDiv = document.getElementById('chat-sources');
+
+      async function sendMessage() {
+        const text = (input.value || '').trim();
+        if (!text) return;
+
+        // Affiche la question dans le log
+        const userDiv = document.createElement('div');
+        userDiv.className = 'chat-message-user';
+        userDiv.innerHTML = '<strong>Vous :</strong> ' + text;
+        log.appendChild(userDiv);
+        log.scrollTop = log.scrollHeight;
+
+        input.value = '';
+        sourcesDiv.textContent = 'Recherche des ressources pertinentes...';
+
+        try {
+          const resp = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+          });
+
+          const data = await resp.json();
+          if (!resp.ok) {
+            throw new Error(data.error || 'Erreur serveur');
+          }
+
+          const assistantDiv = document.createElement('div');
+          assistantDiv.className = 'chat-message-assistant';
+          assistantDiv.innerHTML = '<strong>Assistant :</strong> ' + (data.answer || '(pas de réponse)');
+          log.appendChild(assistantDiv);
+          log.scrollTop = log.scrollHeight;
+
+          // Affiche les ressources proposées
+          sourcesDiv.innerHTML = '';
+          if (Array.isArray(data.sources) && data.sources.length) {
+            const ul = document.createElement('ul');
+            data.sources.forEach(function (s) {
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = s.url;
+              a.target = '_blank';
+              a.rel = 'noopener';
+              a.textContent = '[' + s.type + '] ' + s.title;
+              li.appendChild(a);
+              ul.appendChild(li);
+            });
+            const title = document.createElement('div');
+            title.textContent = 'Ressources suggérées :';
+            sourcesDiv.appendChild(title);
+            sourcesDiv.appendChild(ul);
+          } else {
+            sourcesDiv.textContent = 'Aucune ressource spécifique trouvée.';
+          }
+        } catch (err) {
+          sourcesDiv.textContent = 'Erreur : ' + err;
+        }
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      input.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+          sendMessage();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
