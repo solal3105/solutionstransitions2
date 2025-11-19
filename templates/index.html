@@ -200,7 +200,7 @@
         sourcesDiv.textContent = 'Recherche des ressources pertinentes...';
 
         try {
-          const resp = await fetch('/chat', {
+          const resp = await fetch('/.netlify/functions/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text })
