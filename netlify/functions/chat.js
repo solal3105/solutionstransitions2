@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import OpenAI from "openai";
+const fs = require("fs");
+const path = require("path");
+const OpenAI = require("openai");
 
 const APP_ROOT = path.resolve(path.join(__dirname, "..", ".."));
 const FICHES_PATH = path.join(APP_ROOT, "doc", "fiches.json");
@@ -124,7 +124,7 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4.1-mini";
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const client = OPENAI_API_KEY ? new OpenAI({ apiKey: OPENAI_API_KEY }) : null;
 
-export const handler = async (event) => {
+exports.handler = async (event, _context) => {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
