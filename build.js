@@ -9,7 +9,7 @@ const path = require('path');
 
 const DOC_DIR = path.join(__dirname, 'doc');
 const FUNCTIONS_DIR = path.join(__dirname, 'netlify', 'functions');
-const CHAT_TEMPLATE = path.join(FUNCTIONS_DIR, 'chat.template.js');
+const CHAT_TEMPLATE = path.join(__dirname, 'scripts', 'chat.template.js');
 const CHAT_OUTPUT = path.join(FUNCTIONS_DIR, 'chat.js');
 
 // Charger les données JSON
