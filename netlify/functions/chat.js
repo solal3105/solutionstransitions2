@@ -2,11 +2,12 @@ const fs = require("fs");
 const path = require("path");
 const OpenAI = require("openai");
 
-const APP_ROOT = path.resolve(path.join(__dirname, "..", ".."));
-const FICHES_PATH = path.join(APP_ROOT, "doc", "fiches.json");
-const RESSOURCES_PATH = path.join(APP_ROOT, "doc", "ressources.json");
-const FAQ_PATH = path.join(APP_ROOT, "doc", "faq.json");
-const HOME_PATH = path.join(APP_ROOT, "doc", "home.json");
+// Les fichiers JSON sont dans le dossier data/ à côté de cette fonction
+const DATA_DIR = path.join(__dirname, "data");
+const FICHES_PATH = path.join(DATA_DIR, "fiches.json");
+const RESSOURCES_PATH = path.join(DATA_DIR, "ressources.json");
+const FAQ_PATH = path.join(DATA_DIR, "faq.json");
+const HOME_PATH = path.join(DATA_DIR, "home.json");
 
 function loadJson(p) {
   if (!fs.existsSync(p)) return [];

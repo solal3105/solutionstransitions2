@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solutions Transitions - Assistant IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-light: #14b8a6;
+      --primary-dark: #0d5f59;
+      --secondary: #6366f1;
+      --secondary-light: #818cf8;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-chat: #f1f5f9;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --warning: #f59e0b;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.5rem;
+      height: calc(100vh - 3rem);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--bg-card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar-header p {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    /* Switch Fiches/Ressources */
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-tab {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .sidebar-tab:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .sidebar-tab.active {
+      color: var(--primary);
+      background: rgba(15, 118, 110, 0.05);
+    }
+
+    .sidebar-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      background: var(--border);
+      border-radius: 10px;
+      font-size: 0.7rem;
+      margin-left: 0.5rem;
+    }
+
+    .sidebar-tab.active .tab-count {
+      background: var(--primary);
+      color: white;
+    }
+
+    .sidebar-search {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-search input {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .sidebar-search input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    /* Section des citations */
+    .cited-section {
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem;
+      background: linear-gradient(to bottom, rgba(245, 158, 11, 0.08), transparent);
+      display: none;
+    }
+
+    .cited-section.has-items {
+      display: block;
+    }
+
+    .cited-section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--warning);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .cited-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .cited-item {
+      padding: 0.5rem 0.75rem;
+      background: white;
+      border: 1px solid var(--warning);
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cited-item:hover {
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .cited-item-icon {
+      font-size: 1rem;
+    }
+
+    .cited-item-title {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Liste des fiches/ressources */
+    .items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+
+    .item-card {
+      padding: 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.375rem;
+      border: 1px solid transparent;
+    }
+
+    .item-card:hover {
+      background: var(--bg);
+      border-color: var(--border);
+    }
+
+    .item-card.highlighted {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: var(--warning);
+      animation: pulse 2s ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+    }
+
+    .item-card h3 {
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .item-card p {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .item-tag {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 600;
+      border-radius: 4px;
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .item-tag.fiche { background: var(--primary); }
+    .item-tag.ressource { background: var(--secondary); }
+
+    /* Chat Area */
+    .chat-area {
+      background: var(--bg-card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .chat-header-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .chat-header-text h1 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.125rem;
+    }
+
+    .chat-header-text p {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .message {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 85%;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .message.assistant .message-avatar {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    }
+
+    .message.user .message-avatar {
+      background: var(--secondary);
+    }
+
+    .message-content {
+      padding: 0.875rem 1rem;
+      border-radius: 14px;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .message.assistant .message-content {
+      background: var(--bg-chat);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.user .message-content {
+      background: var(--primary);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-content h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0.75rem 0 0.375rem;
+    }
+
+    .message-content h3:first-child { margin-top: 0; }
+
+    .message-content p { margin: 0.375rem 0; }
+
+    .message-content ul, .message-content ol {
+      margin: 0.375rem 0 0.375rem 1.25rem;
+    }
+
+    .message-content li { margin: 0.2rem 0; }
+
+    .message-content a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .message-content a:hover { text-decoration: underline; }
+
+    .message-content strong { font-weight: 600; }
+
+    /* Sources inline */
+    .sources-inline {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .sources-inline-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 0.375rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.625rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      font-size: 0.75rem;
+      color: var(--text);
+      text-decoration: none;
+      margin: 0.125rem;
+      transition: all 0.2s;
+    }
+
+    .source-chip:hover {
+      border-color: var(--primary);
+      background: rgba(15, 118, 110, 0.05);
+    }
+
+    .source-chip-icon { font-size: 0.85rem; }
+
+    /* Input Area */
+    .chat-input-area {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .chat-input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.375rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .chat-input-wrapper:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .chat-input {
+      flex: 1;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .chat-input:focus { outline: none; }
+
+    .chat-input::placeholder { color: var(--text-light); }
+
+    .chat-send-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .chat-send-btn:hover { background: var(--primary-dark); }
+    .chat-send-btn:active { transform: scale(0.95); }
+    .chat-send-btn:disabled { background: var(--text-light); cursor: not-allowed; }
+
+    /* Welcome */
+    .welcome-message {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      color: var(--text-light);
+    }
+
+    .welcome-message h2 {
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome-message p { margin-bottom: 1.25rem; font-size: 0.9rem; }
+
+    .welcome-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .suggestion-btn {
+      padding: 0.5rem 0.875rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .suggestion-btn:hover {
+      border-color: var(--primary);
+      background: rgba(15, 118, 110, 0.05);
+    }
+
+    /* Loading */
+    .loading-dots {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .loading-dots span {
+      width: 7px;
+      height: 7px;
+      background: var(--text-light);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .sidebar { max-height: 350px; }
+      .chat-area { min-height: 500px; }
+    }
+
+    /* Loading state for sidebar */
+    .loading-sidebar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>📚 Base de connaissances</h2>
+        <p id="sidebar-stats">Chargement...</p>
+      </div>
+      
+      <!-- Tabs Switch -->
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="fiches">
+          📄 Fiches<span class="tab-count" id="fiches-count">-</span>
+        </button>
+        <button class="sidebar-tab" data-tab="ressources">
+          📚 Ressources<span class="tab-count" id="ressources-count">-</span>
+        </button>
+      </div>
+
+      <!-- Section Citations -->
+      <div class="cited-section" id="cited-section">
+        <div class="cited-section-title">⭐ Cités dans la conversation</div>
+        <div class="cited-list" id="cited-list"></div>
+      </div>
+
+      <div class="sidebar-search">
+        <input type="text" id="item-search" placeholder="Rechercher...">
+      </div>
+
+      <!-- Liste Fiches -->
+      <div class="items-list" id="fiches-list">
+        <div class="loading-sidebar">Chargement des fiches...</div>
+      </div>
+
+      <!-- Liste Ressources -->
+      <div class="items-list" id="ressources-list" style="display: none;">
+        <div class="loading-sidebar">Chargement des ressources...</div>
+      </div>
+    </aside>
+
+    <!-- Chat -->
+    <main class="chat-area">
+      <header class="chat-header">
+        <div class="chat-header-icon">🌱</div>
+        <div class="chat-header-text">
+          <h1>Assistant Solutions Transitions</h1>
+          <p>Posez vos questions sur la transition écologique des collectivités</p>
+        </div>
+      </header>
+
+      <div class="chat-messages" id="chat-messages">
+        <div class="welcome-message">
+          <h2>👋 Bienvenue !</h2>
+          <p>Je vous oriente vers les fiches et ressources pertinentes du site.<br>L'assistant garde en mémoire vos 3 derniers échanges.</p>
+          <div class="welcome-suggestions">
+            <button class="suggestion-btn" data-question="Comment se former sur les enjeux de transition écologique ?">Se former aux transitions</button>
+            <button class="suggestion-btn" data-question="Comment financer la transition écologique de ma collectivité ?">Financer la transition</button>
+            <button class="suggestion-btn" data-question="Comment lutter contre la précarité énergétique ?">Précarité énergétique</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <input type="text" class="chat-input" id="chat-input" placeholder="Posez votre question ici...">
+          <button class="chat-send-btn" id="chat-send">➤</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send');
+      const messagesContainer = document.getElementById('chat-messages');
+      const itemSearch = document.getElementById('item-search');
+      const fichesList = document.getElementById('fiches-list');
+      const ressourcesList = document.getElementById('ressources-list');
+      const tabs = document.querySelectorAll('.sidebar-tab');
+      const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+      const citedSection = document.getElementById('cited-section');
+      const citedList = document.getElementById('cited-list');
+      const sidebarStats = document.getElementById('sidebar-stats');
+      const fichesCount = document.getElementById('fiches-count');
+      const ressourcesCount = document.getElementById('ressources-count');
+
+      let conversationHistory = [];
+      let citedItems = new Map();
+      let currentTab = 'fiches';
+      let fichesData = [];
+      let ressourcesData = [];
+
+      // Charger les données JSON
+      async function loadData() {
+        try {
+          const [fichesResp, ressourcesResp] = await Promise.all([
+            fetch('/doc/fiches.json'),
+            fetch('/doc/ressources.json')
+          ]);
+          
+          if (fichesResp.ok) {
+            fichesData = await fichesResp.json();
+          }
+          if (ressourcesResp.ok) {
+            ressourcesData = await ressourcesResp.json();
+          }
+
+          // Mettre à jour les compteurs
+          fichesCount.textContent = fichesData.length;
+          ressourcesCount.textContent = ressourcesData.length;
+          sidebarStats.textContent = `${fichesData.length} fiches · ${ressourcesData.length} ressources`;
+
+          // Rendre les listes
+          renderList(fichesList, fichesData, 'fiche');
+          renderList(ressourcesList, ressourcesData, 'ressource');
+
+        } catch (err) {
+          console.error('Erreur chargement données:', err);
+          sidebarStats.textContent = 'Erreur de chargement';
+        }
+      }
+
+      function renderList(container, items, type) {
+        container.innerHTML = '';
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'item-card';
+          card.dataset.url = item.url;
+          card.dataset.title = item.title;
+          card.dataset.type = type;
+          
+          const resume = item.resume || '';
+          const shortResume = resume.length > 100 ? resume.substring(0, 100) + '...' : resume;
+          
+          card.innerHTML = `
+            <span class="item-tag ${type}">${type === 'fiche' ? 'Fiche' : 'Ressource'}</span>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(shortResume)}</p>
+          `;
+          
+          card.addEventListener('click', () => window.open(item.url, '_blank'));
+          container.appendChild(card);
+        });
+      }
+
+      // Charger les données au démarrage
+      await loadData();
+
+      // Tab switching
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          currentTab = this.dataset.tab;
+          fichesList.style.display = currentTab === 'fiches' ? 'block' : 'none';
+          ressourcesList.style.display = currentTab === 'ressources' ? 'block' : 'none';
+        });
+      });
+
+      // Search
+      itemSearch.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const list = currentTab === 'fiches' ? fichesList : ressourcesList;
+        list.querySelectorAll('.item-card').forEach(card => {
+          const title = card.dataset.title.toLowerCase();
+          card.style.display = title.includes(query) ? 'block' : 'none';
+        });
+      });
+
+      // Suggestions
+      suggestionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          input.value = this.dataset.question;
+          sendMessage();
+        });
+      });
+
+      // Update cited section
+      function updateCitedSection(sources) {
+        if (!Array.isArray(sources)) return;
+        
+        sources.forEach(s => {
+          if (s.url && s.title) {
+            citedItems.set(s.url, { title: s.title, type: s.type || 'fiche' });
+          }
+        });
+
+        if (citedItems.size > 0) {
+          citedSection.classList.add('has-items');
+          citedList.innerHTML = '';
+          citedItems.forEach((item, url) => {
+            const div = document.createElement('div');
+            div.className = 'cited-item';
+            div.innerHTML = `
+              <span class="cited-item-icon">${item.type === 'fiche' ? '📄' : '📚'}</span>
+              <span class="cited-item-title">${escapeHtml(item.title)}</span>
+            `;
+            div.addEventListener('click', () => window.open(url, '_blank'));
+            citedList.appendChild(div);
+          });
+
+          // Highlight in lists
+          document.querySelectorAll('.item-card').forEach(card => {
+            if (citedItems.has(card.dataset.url)) {
+              card.classList.add('highlighted');
+            }
+          });
+        }
+      }
+
+      async function sendMessage() {
+        const text = (input.value || '').trim();
+        if (!text) return;
+
+        const welcome = messagesContainer.querySelector('.welcome-message');
+        if (welcome) welcome.remove();
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.innerHTML = `
+          <div class="message-avatar">👤</div>
+          <div class="message-content">${escapeHtml(text)}</div>
+        `;
+        messagesContainer.appendChild(userMsg);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        input.value = '';
+        sendBtn.disabled = true;
+
+        const loadingMsg = document.createElement('div');
+        loadingMsg.className = 'message assistant';
+        loadingMsg.innerHTML = `
+          <div class="message-avatar">🌱</div>
+          <div class="message-content">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+          </div>
+        `;
+        messagesContainer.appendChild(loadingMsg);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        try {
+          const resp = await fetch('/.netlify/functions/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, history: conversationHistory })
+          });
+
+          const data = await resp.json();
+          
+          if (!resp.ok) {
+            throw new Error(data.error || 'Erreur serveur');
+          }
+
+          loadingMsg.remove();
+
+          // Update cited items
+          updateCitedSection(data.sources);
+
+          const assistantMsg = document.createElement('div');
+          assistantMsg.className = 'message assistant';
+          
+          let sourcesHtml = '';
+          if (Array.isArray(data.sources) && data.sources.length > 0) {
+            sourcesHtml = `
+              <div class="sources-inline">
+                <div class="sources-inline-title">📎 Sources consultées</div>
+                ${data.sources.map(s => `
+                  <a href="${s.url}" target="_blank" rel="noopener" class="source-chip">
+                    <span class="source-chip-icon">${s.type === 'fiche' ? '📄' : '📚'}</span>
+                    ${escapeHtml(s.title.substring(0, 35))}${s.title.length > 35 ? '...' : ''}
+                  </a>
+                `).join('')}
+              </div>
+            `;
+          }
+
+          assistantMsg.innerHTML = `
+            <div class="message-avatar">🌱</div>
+            <div class="message-content">
+              ${renderMarkdown(data.answer || '(pas de réponse)')}
+              ${sourcesHtml}
+            </div>
+          `;
+          messagesContainer.appendChild(assistantMsg);
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+          conversationHistory.push({ role: 'user', content: text });
+          conversationHistory.push({ role: 'assistant', content: data.answer || '' });
+          if (conversationHistory.length > 6) {
+            conversationHistory = conversationHistory.slice(-6);
+          }
+
+        } catch (err) {
+          loadingMsg.remove();
+          const errorMsg = document.createElement('div');
+          errorMsg.className = 'message assistant';
+          errorMsg.innerHTML = `
+            <div class="message-avatar">⚠️</div>
+            <div class="message-content" style="color: #dc2626;">
+              Erreur : ${escapeHtml(err.message)}
+            </div>
+          `;
+          messagesContainer.appendChild(errorMsg);
+        }
+
+        sendBtn.disabled = false;
+        input.focus();
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function renderMarkdown(text) {
+        if (!text) return '';
+        
+        text = escapeHtml(text);
+        text = text.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+        text = text.replace(/^## (.*)$/gm, '<h3>$1</h3>');
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        text = text.replace(/\((https?:\/\/[^\)]+)\)/g, '(<a href="$1" target="_blank" rel="noopener">lien</a>)');
+        text = text.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+        text = text.replace(/^(\d+)\.\s+(.*)$/gm, '<li>$2</li>');
+        text = text.replace(/^[-•]\s+(.*)$/gm, '<li>$1</li>');
+        text = text.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+
+        const lines = text.split('\n');
+        return lines.map(line => {
+          if (!line.trim()) return '';
+          if (line.startsWith('<h3>') || line.startsWith('<ul>') || line.startsWith('<li>')) return line;
+          return '<p>' + line + '</p>';
+        }).filter(Boolean).join('');
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
