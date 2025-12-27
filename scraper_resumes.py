@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 
 BASE_URL = "https://solutionstransitions.fr/"
 FICHES_URL = urljoin(BASE_URL, "les-fiches/")
-RESSOURCES_URL = urljoin(BASE_URL, "les-ressources/")
+RESSOURCES_URL = urljoin(BASE_URL, "les-ressources-2/")
 FAQ_URL = urljoin(BASE_URL, "faq/")
 
 

@@ -19,7 +19,9 @@ cd solutionstransitions2
 pip3 install -r requirements.txt
 
 # Configurer la clé API OpenAI
-# Éditer le fichier .env et remplacer la valeur de OPENAI_API_KEY
+# IMPORTANT : ne committez jamais .env (il est ignoré par Git)
+cp .env.example .env
+# Puis éditez .env et remplacez OPENAI_API_KEY
 ```
 
 ### Lancer le serveur
@@ -86,7 +88,7 @@ solutionstransitions2/
 ├── app.py                    # Backend Flask (dev local)
 ├── scraper_resumes.py        # Scraper du site
 ├── requirements.txt          # Dépendances Python
-├── .env                      # Variables d'environnement (clé API)
+├── .env.example              # Template (à copier en .env)
 ├── start.sh                  # Script de lancement local
 ├── netlify.toml              # Configuration Netlify
 ├── templates/
