@@ -19,6 +19,7 @@ function buildDocEntries() {
       type: "fiche",
       title: fiche.title || "",
       url: fiche.url || "",
+      resume: fiche.resume || "",
       text: textParts.join("\n"),
     });
   });
@@ -33,6 +34,7 @@ function buildDocEntries() {
       type: "ressource",
       title: res.title || "",
       url: res.url || "",
+      resume: res.resume || "",
       text: textParts.join("\n"),
     });
   });
@@ -47,6 +49,7 @@ function buildDocEntries() {
       type: "faq",
       title: faqPage.title || "FAQ",
       url: faqPage.url || "",
+      resume: faqPage.resume || "",
       text: textParts.join("\n"),
     });
   }
@@ -61,6 +64,7 @@ function buildDocEntries() {
       type: "home",
       title: homePage.title || "Accueil",
       url: homePage.url || "",
+      resume: homePage.resume || "",
       text: textParts.join("\n"),
     });
   }
@@ -203,7 +207,7 @@ exports.handler = async (event, _context) => {
     contextParts.push(
       `[${doc.type.toUpperCase()}] "${doc.title}"\nURL: ${doc.url}\nContenu:\n${doc.text}`
     );
-    sources.push({ type: doc.type, title: doc.title, url: doc.url });
+    sources.push({ type: doc.type, title: doc.title, url: doc.url, resume: doc.resume || "" });
   }
 
   const context = contextParts.length
@@ -216,14 +220,14 @@ RÈGLES STRICTES :
 1. Tu ne dois JAMAIS inventer de fiches ou ressources. Tu ne peux mentionner QUE les documents fournis dans le contexte ci-dessous.
 2. Quand tu mentionnes une fiche ou ressource, tu DOIS inclure son URL exacte entre parenthèses, comme ceci : "**Titre de la fiche** (URL)"
 3. Privilégie les FICHES (type=fiche) car elles sont plus complètes et pratiques que les ressources.
-4. Sois concis et orienté action : propose directement les fiches pertinentes avec une brève explication de pourquoi elles répondent à la question.
-5. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
-6. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
+4. Ta priorité est de BIEN COMPRENDRE le besoin. Si la question est large/ambiguë, pose 1 à 2 questions de clarification AVANT de proposer des fiches/ressources. Dans ce cas, ne propose au maximum qu'1 document “le plus probable”.
+5. Sois concis : vise 60 à 120 mots maximum, utilise des puces courtes. Évite les longs paragraphes.
+6. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
+7. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
 
 Format de réponse idéal :
-- Cite 1 à 3 fiches pertinentes avec leur URL
-- Explique brièvement pourquoi chaque fiche est utile
-- Synthétise les points clés si le contexte le permet`;
+- Si besoin : commence par 1 à 2 questions de clarification
+- Sinon : cite 1 à 3 fiches/ressources pertinentes avec leur URL et 1 phrase de justification chacune`;
 
   // Construire les messages avec l'historique
   const messages = [

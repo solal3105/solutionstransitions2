@@ -59,6 +59,7 @@ def _build_doc_entries() -> list[dict]:
                 "type": "fiche",
                 "title": fiche.get("title", ""),
                 "url": fiche.get("url", ""),
+                "resume": fiche.get("resume", ""),
                 "text": "\n".join(text_parts),
             }
         )
@@ -76,6 +77,7 @@ def _build_doc_entries() -> list[dict]:
                 "type": "ressource",
                 "title": res.get("title", ""),
                 "url": res.get("url", ""),
+                "resume": res.get("resume", ""),
                 "text": "\n".join(text_parts),
             }
         )
@@ -94,6 +96,7 @@ def _build_doc_entries() -> list[dict]:
                 "type": "faq",
                 "title": faq_page.get("title", "FAQ"),
                 "url": faq_page.get("url", ""),
+                "resume": faq_page.get("resume", ""),
                 "text": "\n".join(text_parts),
             }
         )
@@ -112,6 +115,7 @@ def _build_doc_entries() -> list[dict]:
                 "type": "home",
                 "title": home_page.get("title", "Accueil"),
                 "url": home_page.get("url", ""),
+                "resume": home_page.get("resume", ""),
                 "text": "\n".join(text_parts),
             }
         )
@@ -231,7 +235,14 @@ def chat():
         context_parts.append(
             f"[{doc['type'].upper()}] \"{doc['title']}\"\nURL: {doc['url']}\nContenu:\n{doc['text']}"
         )
-        sources.append({"type": doc["type"], "title": doc["title"], "url": doc["url"]})
+        sources.append(
+            {
+                "type": doc["type"],
+                "title": doc["title"],
+                "url": doc["url"],
+                "resume": doc.get("resume", ""),
+            }
+        )
 
     context = "\n\n".join(context_parts) if context_parts else "(aucun contexte trouvé dans les documents)"
 
@@ -241,14 +252,14 @@ RÈGLES STRICTES :
 1. Tu ne dois JAMAIS inventer de fiches ou ressources. Tu ne peux mentionner QUE les documents fournis dans le contexte ci-dessous.
 2. Quand tu mentionnes une fiche ou ressource, tu DOIS inclure son URL exacte entre parenthèses, comme ceci : "**Titre de la fiche** (URL)"
 3. Privilégie les FICHES (type=fiche) car elles sont plus complètes et pratiques que les ressources.
-4. Sois concis et orienté action : propose directement les fiches pertinentes avec une brève explication de pourquoi elles répondent à la question.
-5. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
-6. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
+4. Ta priorité est de BIEN COMPRENDRE le besoin. Si la question est large/ambiguë, pose 1 à 2 questions de clarification AVANT de proposer des fiches/ressources. Dans ce cas, ne propose au maximum qu'1 document “le plus probable”.
+5. Sois concis : vise 60 à 120 mots maximum, utilise des puces courtes. Évite les longs paragraphes.
+6. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
+7. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
 
 Format de réponse idéal :
-- Cite 1 à 3 fiches pertinentes avec leur URL
-- Explique brièvement pourquoi chaque fiche est utile
-- Synthétise les points clés si le contexte le permet"""
+- Si besoin : commence par 1 à 2 questions de clarification
+- Sinon : cite 1 à 3 fiches/ressources pertinentes avec leur URL et 1 phrase de justification chacune"""
 
     try:
         # Construire les messages avec l'historique
