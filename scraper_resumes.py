@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import json
 import os
 import unicodedata
+from typing import Optional
 from urllib.parse import urljoin
 
 import requests
@@ -60,7 +63,7 @@ def extract_ressource_links() -> list[dict]:
     return ressources
 
 
-def extract_pdf_url(soup: BeautifulSoup) -> str | None:
+def extract_pdf_url(soup: BeautifulSoup) -> Optional[str]:
     for a in soup.find_all("a", href=True):
         text = (a.get_text() or "").strip()
         href = a["href"]

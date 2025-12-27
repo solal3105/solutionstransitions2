@@ -93,24 +93,70 @@ function simpleTokenize(text) {
     .filter((t) => t && t.length > 2);
 }
 
+// Stemming français simplifié pour améliorer la recherche
+function simpleStem(word) {
+  if (!word || word.length < 4) return word;
+  // Retirer les suffixes français courants
+  return word
+    .replace(/ement$/i, '')
+    .replace(/ation$/i, '')
+    .replace(/ement$/i, '')
+    .replace(/tion$/i, '')
+    .replace(/ique$/i, '')
+    .replace(/eur$/i, '')
+    .replace(/euse$/i, '')
+    .replace(/ment$/i, '')
+    .replace(/er$/i, '')
+    .replace(/ir$/i, '')
+    .replace(/ant$/i, '')
+    .replace(/ent$/i, '')
+    .replace(/aux$/i, 'al')
+    .replace(/s$/i, '');
+}
+
 function findRelevantDocs(question, topK = 5) {
   const qTokens = simpleTokenize(question || "");
+  const qStems = qTokens.map(simpleStem);
   if (!qTokens.length) return [];
 
   const scored = [];
   for (const doc of ALL_DOCS) {
     const docTokens = simpleTokenize(doc.text);
+    const docStems = docTokens.map(simpleStem);
+    const titleTokens = simpleTokenize(doc.title || "");
+    const titleStems = titleTokens.map(simpleStem);
     if (!docTokens.length) continue;
+    
     let score = 0;
-    for (const tok of qTokens) {
-      const titleTokens = simpleTokenize(doc.title || "");
+    
+    // Bonus pour les fiches (priorité sur les ressources)
+    if (doc.type === "fiche") {
+      score += 3;
+    }
+    
+    for (let i = 0; i < qTokens.length; i++) {
+      const tok = qTokens[i];
+      const stem = qStems[i];
+      
+      // Match exact dans le titre : +5
       if (titleTokens.includes(tok)) {
+        score += 5;
+      }
+      // Match stem dans le titre : +3
+      else if (titleStems.some(ts => ts === stem || ts.includes(stem) || stem.includes(ts))) {
+        score += 3;
+      }
+      
+      // Match exact dans le texte : +2
+      if (docTokens.includes(tok)) {
         score += 2;
       }
-      if (docTokens.includes(tok)) {
+      // Match stem dans le texte : +1
+      else if (docStems.some(ds => ds === stem || ds.includes(stem) || stem.includes(ds))) {
         score += 1;
       }
     }
+    
     if (score > 0) {
       scored.push({ score, doc });
     }
@@ -147,6 +193,8 @@ exports.handler = async (event, _context) => {
   }
 
   const message = (payload.message || "").trim();
+  const history = Array.isArray(payload.history) ? payload.history : [];
+  
   if (!message) {
     return {
       statusCode: 400,
@@ -154,13 +202,20 @@ exports.handler = async (event, _context) => {
     };
   }
 
-  const relevantDocs = findRelevantDocs(message, 5);
+  // Combiner l'historique et le message actuel pour une meilleure recherche
+  const searchQuery = history
+    .filter(h => h.role === 'user')
+    .map(h => h.content)
+    .concat([message])
+    .join(' ');
+  
+  const relevantDocs = findRelevantDocs(searchQuery, 5);
 
   const contextParts = [];
   const sources = [];
   for (const doc of relevantDocs) {
     contextParts.push(
-      `[Source] type=${doc.type}, titre=${doc.title}, url=${doc.url}\nContenu :\n${doc.text}`
+      `[${doc.type.toUpperCase()}] "${doc.title}"\nURL: ${doc.url}\nContenu:\n${doc.text}`
     );
     sources.push({ type: doc.type, title: doc.title, url: doc.url });
   }
@@ -169,21 +224,44 @@ exports.handler = async (event, _context) => {
     ? contextParts.join("\n\n")
     : "(aucun contexte trouvé dans les documents)";
 
-  const systemPrompt =
-    "Tu es un assistant pour des élus, agents territoriaux et acteurs locaux. " +
-    "Tu réponds en français et tu aides surtout à orienter vers les bonnes fiches et ressources de Solutions Transitions. " +
-    "Quand c'est possible, tu expliques quelles ressources sont pertinentes et pourquoi, et tu synthétises aussi les principaux conseils issus du contexte.";
+  const systemPrompt = `Tu es un assistant pour le site Solutions Transitions, destiné aux élus, agents territoriaux et acteurs locaux.
+
+RÈGLES STRICTES :
+1. Tu ne dois JAMAIS inventer de fiches ou ressources. Tu ne peux mentionner QUE les documents fournis dans le contexte ci-dessous.
+2. Quand tu mentionnes une fiche ou ressource, tu DOIS inclure son URL exacte entre parenthèses, comme ceci : "**Titre de la fiche** (URL)"
+3. Privilégie les FICHES (type=fiche) car elles sont plus complètes et pratiques que les ressources.
+4. Sois concis et orienté action : propose directement les fiches pertinentes avec une brève explication de pourquoi elles répondent à la question.
+5. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
+6. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
+
+Format de réponse idéal :
+- Cite 1 à 3 fiches pertinentes avec leur URL
+- Explique brièvement pourquoi chaque fiche est utile
+- Synthétise les points clés si le contexte le permet`;
+
+  // Construire les messages avec l'historique
+  const messages = [
+    { role: "system", content: systemPrompt },
+  ];
+  
+  // Ajouter l'historique de conversation (limité aux 6 derniers messages)
+  const recentHistory = history.slice(-6);
+  for (const h of recentHistory) {
+    if (h.role === 'user' || h.role === 'assistant') {
+      messages.push({ role: h.role, content: h.content });
+    }
+  }
+  
+  // Ajouter le message actuel avec le contexte
+  messages.push({
+    role: "user",
+    content: `Contexte documentaire :\n${context}\n\nQuestion de l'utilisateur : ${message}`,
+  });
 
   try {
     const completion = await client.chat.completions.create({
       model: OPENAI_MODEL,
-      messages: [
-        { role: "system", content: systemPrompt },
-        {
-          role: "user",
-          content: `Contexte documentaire :\n${context}\n\nQuestion de l'utilisateur : ${message}`,
-        },
-      ],
+      messages: messages,
     });
 
     const answer =

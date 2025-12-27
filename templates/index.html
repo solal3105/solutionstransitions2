@@ -42,7 +42,8 @@
   <h1>Solutions Transitions - Assistant & Ressources</h1>
 
   <section id="chat">
-    <h2>Assistant IA (orientation vers les ressources)</h2>
+    <h2>Assistant IA</h2>
+    <p style="font-size:0.9rem; color:#666; margin-bottom:1rem;">Posez vos questions sur la transition écologique des collectivités. L'assistant vous orientera vers les <strong></strong>fiches</strong> et ressources pertinentes du site Solutions Transitions.<br><em>L'assistant garde en mémoire vos 3 derniers échanges pour mieux vous répondre.</em></p>
     <div id="chat-container">
       <div id="chat-log"></div>
       <div id="chat-input-row">
@@ -60,6 +61,9 @@
       const sendBtn = document.getElementById('chat-send');
       const log = document.getElementById('chat-log');
       const sourcesDiv = document.getElementById('chat-sources');
+      
+      // Historique des messages pour la mémoire conversationnelle
+      let conversationHistory = [];
 
       async function sendMessage() {
         const text = (input.value || '').trim();
@@ -73,13 +77,21 @@
         log.scrollTop = log.scrollHeight;
 
         input.value = '';
-        sourcesDiv.textContent = 'Recherche des ressources pertinentes...';
+        sourcesDiv.textContent = 'Recherche des informations pertinentes...';
 
         try {
-          const resp = await fetch('/.netlify/functions/chat', {
+
+
+
+
+          // Détecte si on est sur Netlify ou en local (Flask)
+          const chatEndpoint = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? '/chat' 
+            : '/.netlify/functions/chat';
+          const resp = await fetch(chatEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text })
+            body: JSON.stringify({ message: text, history: conversationHistory })
           });
 
           const data = await resp.json();
@@ -101,6 +113,14 @@
 
           log.appendChild(assistantDiv);
           log.scrollTop = log.scrollHeight;
+          
+          // Ajouter à l'historique pour la mémoire conversationnelle
+          conversationHistory.push({ role: 'user', content: text });
+          conversationHistory.push({ role: 'assistant', content: data.answer || '' });
+          // Limiter l'historique aux 6 derniers messages (3 échanges)
+          if (conversationHistory.length > 6) {
+            conversationHistory = conversationHistory.slice(-6);
+          }
 
           // Affiche les ressources proposées
           sourcesDiv.innerHTML = '';
@@ -117,11 +137,11 @@
               ul.appendChild(li);
             });
             const title = document.createElement('div');
-            title.textContent = 'Ressources suggérées :';
+            title.textContent = 'Informations suggérées :';
             sourcesDiv.appendChild(title);
             sourcesDiv.appendChild(ul);
           } else {
-            sourcesDiv.textContent = 'Aucune ressource spécifique trouvée.';
+            sourcesDiv.textContent = 'Aucune information spécifique trouvée.';
           }
         } catch (err) {
           sourcesDiv.textContent = 'Erreur : ' + err;
@@ -141,9 +161,18 @@
 
         // Gras **...**
         text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        
+        // Liens markdown [texte](url)
+        text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        
+        // URLs entre parenthèses (URL) - format demandé par le prompt
+        text = text.replace(/\((https?:\/\/[^\)]+)\)/g, '(<a href="$1" target="_blank" rel="noopener">lien</a>)');
+        
+        // URLs seules (pas déjà dans un lien)
+        text = text.replace(/(?<!href="|>)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
 
         // Listes numérotées (1. ...)
-        text = text.replace(/^(\d+)\.\s+(.*)$/gm, '<li>$1. $2</li>');
+        text = text.replace(/^(\d+)\.\s+(.*)$/gm, '<li>$2</li>');
 
         // Listes à puces (- ...)
         text = text.replace(/^\-\s+(.*)$/gm, '<li>$1</li>');
