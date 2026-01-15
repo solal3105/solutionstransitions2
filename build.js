@@ -47,3 +47,7 @@ template = template.replace('__HOME_DATA__', JSON.stringify(home));
 fs.writeFileSync(CHAT_OUTPUT, template, 'utf8');
 console.log(`\nGenerated ${CHAT_OUTPUT}`);
 console.log(`Total: ${fiches.length} fiches, ${ressources.length} ressources`);
+
+// Générer aussi l'index.html statique
+console.log('\nGenerating static index.html...');
+require('./generate_static.js');

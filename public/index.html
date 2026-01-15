@@ -595,16 +595,16 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2>📚 Base de connaissances</h2>
-        <p>{{ fiches|length }} fiches · {{ ressources|length }} ressources</p>
+        <p>32 fiches · 42 ressources</p>
       </div>
       
       <!-- Tabs Switch -->
       <div class="sidebar-tabs">
         <button class="sidebar-tab active" data-tab="fiches">
-          📄 Fiches<span class="tab-count">{{ fiches|length }}</span>
+          📄 Fiches<span class="tab-count">32</span>
         </button>
         <button class="sidebar-tab" data-tab="ressources">
-          📚 Ressources<span class="tab-count">{{ ressources|length }}</span>
+          📚 Ressources<span class="tab-count">42</span>
         </button>
       </div>
 
@@ -615,24 +615,382 @@
 
       <!-- Liste Fiches -->
       <div class="items-list" id="fiches-list">
-        {% for fiche in fiches %}
-        <div class="item-card" data-url="{{ fiche.url }}" data-title="{{ fiche.title }}" data-type="fiche">
+        
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/quels-sujets-impacteront-les-politiques-de-transition-avant-la-fin-des-prochaines-mandatures-locales/" data-title="Quels sujets impacteront les politiques de transition avant la fin des prochaines mandatures locales ?" data-type="fiche">
           <span class="item-tag fiche">Fiche</span>
-          <h3>{{ fiche.title }}</h3>
-          <p>{{ fiche.resume[:100] }}{% if fiche.resume|length > 100 %}...{% endif %}</p>
+          <h3>Quels sujets impacteront les politiques de transition avant la fin des prochaines mandatures locales ?</h3>
+          <p>cette fiche vise à donner un temps d’avance pour les décideurs locaux de demain sur les enjeux émerg...</p>
         </div>
-        {% endfor %}
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-lintercommunalite-est-une-echelle-strategique-en-matiere-de-transition-ecologique/" data-title="Pourquoi l'intercommunalité est une échelle stratégique en matière de transition écologique ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi l'intercommunalité est une échelle stratégique en matière de transition écologique ?</h3>
+          <p>La réalité du fait intercommunal sur un territoire est parfois une découverte pour les nouveaux élus...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-parler-decologie-et-connecter-les-solutions-ecologiques-aux-attentes-des-habitants-2/" data-title="Comment parler d’écologie et connecter les “solutions” écologiques aux attentes des habitants ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment parler d’écologie et connecter les “solutions” écologiques aux attentes des habitants ?</h3>
+          <p>S’il est particulièrement délicat de parler ouvertement d’écologie dans la période actuelle, il exis...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/quels-sont-les-principaux-operateurs-de-letat-pour-vous-accompagner-dans-la-conception-et-la-mise-en-oeuvre-de-vos-projets-de-transition-ecologique/" data-title="Quels sont les principaux opérateurs de l’Etat pour accompagner vos projets locaux de transition écologique ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Quels sont les principaux opérateurs de l’Etat pour accompagner vos projets locaux de transition écologique ?</h3>
+          <p>Plusieurs opérateurs de l’Etat peuvent vous aider dans vos projets de transition. Leurs intervention...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-comprendre-le-contexte-general-de-backlash-ecologique/" data-title="Comment comprendre le contexte général de backlash écologique ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment comprendre le contexte général de backlash écologique ?</h3>
+          <p>Cette fiche aborde le phénomène de backlash écologique. Elle en décrit les dimensions citoyenne, pol...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/prevoir-son-plan-dinvestissement-et-laligner-avec-ses-objectifs-climat-une-methode-pour-un-ppi-aligne-climat/" data-title="Prévoir son plan d’investissement et l’aligner avec ses objectifs climat -  Une méthode pour un “PPI aligné climat”" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Prévoir son plan d’investissement et l’aligner avec ses objectifs climat -  Une méthode pour un “PPI aligné climat”</h3>
+          <p>Cette fiche rappelle la nécessité d’accélérer les investissements en faveur du climat (1). Elle soul...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/les-fondamentaux-du-budget-communal/" data-title="Les fondamentaux du budget communal" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Les fondamentaux du budget communal</h3>
+          <p>Cette fiche balaye quelques éléments fondamentaux relatifs au budget communal : sa structuration en ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/utiliser-le-crte-pour-construire-une-dynamique-locale/" data-title="Utiliser le CRTE pour construire une dynamique locale" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Utiliser le CRTE pour construire une dynamique locale</h3>
+          <p>Dès 2020 les Contrats pour la Réussite de la Transition Écologique (CRTE) étaient présentés comme l’...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/la-demarche-paysagere-pour-animer-et-coordonner-la-transition-ecologique/" data-title="La démarche paysagère pour animer et coordonner la transition écologique" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>La démarche paysagère pour animer et coordonner la transition écologique</h3>
+          <p>Parler de paysage implique de dépasser les préjugés qui en font une approche esthétisante ou conserv...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/mon-restau-responsable-un-outil-au-service-de-cantines-plus-durables/" data-title="Mon Restau Responsable® : un outil au service de cantines plus durables" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Mon Restau Responsable® : un outil au service de cantines plus durables</h3>
+          <p>Crée il y a dix ans par la Fondation pour la Nature et l’Homme et le Réseau Restau Co, la démarche g...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/lexemple-dune-methode-de-diagnostic-cap-territoires-durables/" data-title="L’exemple d’une méthode de diagnostic : CAP Territoires Durables" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>L’exemple d’une méthode de diagnostic : CAP Territoires Durables</h3>
+          <p>Le Projet Les Fiches Comprendre Organiser Agir Comprendre Organiser Agir</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/reguler-la-publicite-pour-ameliorer-la-sante-et-le-cadre-de-vie-des-personnes/" data-title="Réguler la publicité pour améliorer la santé et le cadre de vie des personnes" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Réguler la publicité pour améliorer la santé et le cadre de vie des personnes</h3>
+          <p>Cette fiche présente les leviers à disposition des élus locaux pour intervenir sur la publicité tout...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-et-comment-inscrire-son-action-dans-une-cop-regionale/" data-title="Pourquoi et comment inscrire son action dans une COP régionale ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi et comment inscrire son action dans une COP régionale ?</h3>
+          <p>Cette fiche a pour objectif de montrer comment les Conférences des Parties (COP) organisées à l’éche...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-gerer-son-patrimoine-bati/" data-title="Comment gérer son patrimoine bâti ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment gérer son patrimoine bâti ?</h3>
+          <p>Le patrimoine bâti d’une collectivité est un enjeu écologique, social, budgétaire et de santé publiq...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/la-budgetisation-verte-methode-et-interet/" data-title="La budgétisation verte : méthode et intérêt" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>La budgétisation verte : méthode et intérêt</h3>
+          <p>Cette fiche a pour objectif d’expliciter les objectifs et modalités de déploiement de la budgétisati...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/placer-les-directions-des-ressources-humaines-au-service-de-la-transition-ecologique/" data-title="Placer les Directions des Ressources Humaines au service de la transition écologique" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Placer les Directions des Ressources Humaines au service de la transition écologique</h3>
+          <p>Le Projet Les Fiches Comprendre Organiser Agir Comprendre Organiser Agir</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-le-cnfpt-accompagne-les-collectivites-dans-leurs-demarches-de-transition-ecologique/" data-title="Comment le CNFPT accompagne les collectivités dans leurs démarches de transition écologique ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment le CNFPT accompagne les collectivités dans leurs démarches de transition écologique ?</h3>
+          <p>Cette fiche est dédiée aux modalités concrètes d’accompagnements proposés par le Centre National de ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/la-methode-passer-du-programme-de-campagne-au-projet-de-mandat-2/" data-title="La méthode : passer du programme de campagne au projet de mandat" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>La méthode : passer du programme de campagne au projet de mandat</h3>
+          <p>Une fois les élections remportées, deux transformations sont à opérer : transformer son équipe de ca...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/quelles-expertises-et-competences-faut-il-recruter-en-interne/" data-title="Quelles expertises et compétences faut-il recruter en interne ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Quelles expertises et compétences faut-il recruter en interne ?</h3>
+          <p>La transition écologique nécessite des compétences nouvelles pour transformer ses pratiques. Mais qu...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-s-endetter-est-legitime-pour-financer-la-transition-ecologique/" data-title="Pourquoi s'endetter est légitime pour financer la transition écologique" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi s'endetter est légitime pour financer la transition écologique</h3>
+          <p>Atteindre la neutralité carbone, préserver la biodiversité, adapter nos territoires aux dérèglements...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/decider-en-collectivite/" data-title="Au-delà des compétences, qui décide de quoi dans une collectivité ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Au-delà des compétences, qui décide de quoi dans une collectivité ?</h3>
+          <p>La manière de fonctionner d’une collectivité territoriale peut sembler obscure pour les nouveaux élu...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-et-comment-manager-par-la-transition-ecologique/" data-title="Pourquoi et comment manager par la transition écologique ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi et comment manager par la transition écologique ?</h3>
+          <p>Dans une organisation, la fonction managériale répond à un certain nombre de besoins qu’il s’agit d’...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-et-comment-travailler-avec-les-experts-scientifiques/" data-title="Pourquoi et comment travailler avec les experts scientifiques ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi et comment travailler avec les experts scientifiques ?</h3>
+          <p>Cette fiche présente l’intérêt qu’ont les élus et leur collectivité de travailler avec la recherche ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-organiser-son-administration-pour-etre-plus-efficace/" data-title="Comment organiser son administration pour être plus efficace ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment organiser son administration pour être plus efficace ?</h3>
+          <p>Pour que l’administration soit efficace en matière de transition écologique (TE), faut-il une organi...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-analyser-la-faisabilite-des-programmes-municipaux-et-intercommunaux/" data-title="Comment analyser la faisabilité des programmes municipaux et intercommunaux ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment analyser la faisabilité des programmes municipaux et intercommunaux ?</h3>
+          <p>Une campagne électorale est l’occasion de formuler librement plusieurs propositions. Comme le rappor...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-faire-de-la-mise-en-recits/" data-title="Comment faire de la mise en récits ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment faire de la mise en récits ?</h3>
+          <p>Plus transformatrice et mobilisante que la production d’une simple communication, la mise en récits ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/comment-recueillir-les-aspirations-des-habitants/" data-title="Comment recueillir les aspirations des habitants ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Comment recueillir les aspirations des habitants ?</h3>
+          <p>La variété des territoires et de leurs habitants invite à bien cerner les besoins dans leur diversit...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/les-competences-et-leviers-daction-dont-disposent-les-collectivites-territoriales-pour-engager-leur-transition-ecologique/" data-title="Les compétences et leviers d’action dont disposent les collectivités territoriales pour engager leur transition écologique" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Les compétences et leviers d’action dont disposent les collectivités territoriales pour engager leur transition écologique</h3>
+          <p>Les collectivités territoriales disposent de toutes les compétences juridiques nécessaires pour enga...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-faut-il-agir-est-ce-que-cela-a-du-sens-de-le-faire-localement/" data-title="Pourquoi faut-il agir ? Est-ce que cela a du sens de le faire localement ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi faut-il agir ? Est-ce que cela a du sens de le faire localement ?</h3>
+          <p>Une collectivité territoriale a de nombreuses raisons d’agir pour la transition écologique. Outre de...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/apprehender-la-crise-environnementale-des-phenomenes-planetaires-aux-impacts-pourtant-bien-locaux/" data-title="Appréhender la crise environnementale : des phénomènes planétaires aux impacts pourtant bien locaux" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Appréhender la crise environnementale : des phénomènes planétaires aux impacts pourtant bien locaux</h3>
+          <p>La crise environnementale est une combinaison de phénomènes qui se complètent, s’accumulent et s’amp...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/pourquoi-et-comment-les-communes-peuvent-agir-avec-lunion-europeenne-et-peser-dans-ses-orientations/" data-title="Pourquoi et comment les communes peuvent agir avec l’Union Européenne et peser dans ses orientations ?" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Pourquoi et comment les communes peuvent agir avec l’Union Européenne et peser dans ses orientations ?</h3>
+          <p>Cette fiche a pour objectif de montrer comment l’ Union européenne (UE) peut accompagner concrètemen...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/portfolio/se-former-collectivement/" data-title="Se former collectivement" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>Se former collectivement</h3>
+          <p>Être maire ou élu local aujourd’hui est bien plus complexe qu’il y a 20 ans. Face à cette complexifi...</p>
+        </div>
       </div>
 
       <!-- Liste Ressources -->
       <div class="items-list" id="ressources-list" style="display: none;">
-        {% for ressource in ressources %}
-        <div class="item-card" data-url="{{ ressource.url }}" data-title="{{ ressource.title }}" data-type="ressource">
+        
+        <div class="item-card" data-url="https://solutionstransitions.fr/comprendre-3/" data-title="Comprendre les enjeuxpour mieux agir" data-type="ressource">
           <span class="item-tag ressource">Ressource</span>
-          <h3>{{ ressource.title }}</h3>
-          <p>{{ ressource.resume[:100] }}{% if ressource.resume|length > 100 %}...{% endif %}</p>
+          <h3>Comprendre les enjeuxpour mieux agir</h3>
+          <p>Que comprendre du contexte et des enjeux ? Quels sont les leviers d’actions ? Cette section se conce...</p>
         </div>
-        {% endfor %}
+        <div class="item-card" data-url="https://solutionstransitions.fr/organiser-3/" data-title="Organiser la transitionà l'échelle de votre collectivité" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Organiser la transitionà l'échelle de votre collectivité</h3>
+          <p>Comment organiser et piloter l’action à la tête d’une collectivité ? Cette section cherchera à donne...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/agir-3/" data-title="Agir concrètementdans les territoires" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Agir concrètementdans les territoires</h3>
+          <p>Comment agir en déployant les politiques adéquates et en mobilisant les acteurs ? Cette section ira ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/la-mission-adaptation-le-nouveau-service-commun-en-expertise-et-ingenierie-a-destination-des-collectivites/" data-title="La Mission Adaptation, le nouveau service commun en expertise et ingénierie à destination des collectivités" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>La Mission Adaptation, le nouveau service commun en expertise et ingénierie à destination des collectivités</h3>
+          <p>Résumé : De nombreuses collectivités ne disposent pas en interne des compétences techniques pour éva...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/territoires-au-futur-une-plateforme-pour-accelerer-la-resilience-territoriale/" data-title="Territoires au futur, une plateforme pour accélérer la résilience territoriale" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Territoires au futur, une plateforme pour accélérer la résilience territoriale</h3>
+          <p>Résumé : Territoires au futur est un outil d’autodiagnostic de résilience territoriale  qui synthéti...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/que-peuvent-faire-les-maires-face-au-changement-climatique/" data-title="Que peuvent faire les maires face au changement climatique ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Que peuvent faire les maires face au changement climatique ?</h3>
+          <p>Résumé : Alors que le réchauffement mondial a dépassé les 1,5°C en 2024 et que la France se prépare ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/programme-slime-un-programme-a-destination-des-collectivites-locales-pour-lutter-contre-la-precarite-energetique/" data-title="Programme Slime : Un programme à destination des collectivités locales pour lutter  contre la précarité énergétique" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Programme Slime : Un programme à destination des collectivités locales pour lutter  contre la précarité énergétique</h3>
+          <p>Résumé : Le programme Slime est une solution pour agir contre la précarité énergétique. Avec ce prog...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/la-transition-energetique-une-opportunite-pour-les-territoires/" data-title="La transition énergétique, une opportunité pour les territoires" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>La transition énergétique, une opportunité pour les territoires</h3>
+          <p>Résumé : Après seulement un siècle et demi d’un développement prétendant s’affranchir de toute limit...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/decret-decence-comment-lappliquer-mode-demploi-pour-les-collectivites-locales/" data-title="Décret décence : comment l’appliquer ? Mode d’emploi pour les collectivités locales" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Décret décence : comment l’appliquer ? Mode d’emploi pour les collectivités locales</h3>
+          <p>Résumé : 12 millions de Françaises et de Français sont en précarité énergétique. Pourtant, les solut...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/le-podcast-de-la-fabrique-des-transitions/" data-title="Le Podcast de la Fabrique des Transitions" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Le Podcast de la Fabrique des Transitions</h3>
+          <p>Résumé : Cette série de dix podcasts réalisée par le média Territoires Audacieux en partenariat avec...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/les-5-dimensions-de-la-mise-en-recits/" data-title="Les 5 dimensions de la Mise en Récits" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Les 5 dimensions de la Mise en Récits</h3>
+          <p>Résumé : Réalisée avec le soutien de l’ADEME, “Les 5 dimensions de la Mise en récits (M.E.R.) : manu...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/les-4-fondamentaux-de-la-conduite-de-changement-systemique/" data-title="Les 4 fondamentaux de la conduite de changement systémique" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Les 4 fondamentaux de la conduite de changement systémique</h3>
+          <p>Résumé : Cette publication donne à voir les principes qui guident l’esprit et la démarche de la Fabr...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/quand-des-collectivites-semparent-des-questions-dinstallation-transmission-agricoles-exemples-en-ille-et-vilain/" data-title="Quand des collectivités s’emparent des questions d’installation / transmission agricoles. Exemples en Ille-et-Vilaine" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Quand des collectivités s’emparent des questions d’installation / transmission agricoles. Exemples en Ille-et-Vilaine</h3>
+          <p>Résumé : En tant que collectivité, en quoi travailler sur l’installation-transmission en agriculture...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/renover-les-batiments-des-collectivites-territoriales/" data-title="Rénover les bâtiments des collectivités territoriales" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Rénover les bâtiments des collectivités territoriales</h3>
+          <p>Résumé : La France est aujourd’hui confrontée au défi majeur de la transition écologique. Pour y fai...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/elections-municipales-2026-quelles-attentes-des-francais-2/" data-title="Élections Municipales 2026 : quelles attentes des Français" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Élections Municipales 2026 : quelles attentes des Français</h3>
+          <p>Résumé : A quelques mois des élections municipales, le think tank Destin Commun publie une nouvelle ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/guide-methodologique-contrat-de-performance-energetique/" data-title="Guide méthodologique pour la mise en place d’un « Contrat de Performance Énergétique »" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Guide méthodologique pour la mise en place d’un « Contrat de Performance Énergétique »</h3>
+          <p>Résumé : ACTEE, Action des Collectivités Territoriales pour l’Efficacité Energétique, est un program...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/impact-d-un-projet-de-renovation-sur-les-finances-d-une-commune/" data-title="Impact d’un projet de rénovation sur les finances d’une commune" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Impact d’un projet de rénovation sur les finances d’une commune</h3>
+          <p>Résumé : Ce document est à destination des accompagnateurs de collectivités pour les projets de réno...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/comment-renaturer-les-territoires/" data-title="Comment renaturer les territoires ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Comment renaturer les territoires ?</h3>
+          <p>Résumé : Depuis la fin de l’année 2023, la Fnau, en partenariat avec l’ADEME et l’Office Français de...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/2022-2027-quel-horizon-pour-l-intercommunalite/" data-title="2022-2027 : quel horizon pour l’intercommunalité ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>2022-2027 : quel horizon pour l’intercommunalité ?</h3>
+          <p>Résumé : L’intercommunalité apparaît aujourd’hui au milieu du gué estime l’ADGCF. Le « couple commun...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/de-quels-leviers-disposent-les-collectivites-pour-agir-sur-le-foncier-agricole/" data-title="De quels leviers disposent les collectivités pour agir sur le foncier agricole ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>De quels leviers disposent les collectivités pour agir sur le foncier agricole ?</h3>
+          <p>Résumé : Cette note publiée par une série de la Chaire Unesco Alimentations du monde présente cinq l...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/degager-des-credits-pour-la-transition-ecologique-dans-les-collectivites-territoriales/" data-title="Dégager des crédits pour la transition écologique dans les collectivités territoriales" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Dégager des crédits pour la transition écologique dans les collectivités territoriales</h3>
+          <p>Résumé : Environ 70 % de la mise en œuvre de la transition écologique passe par les collectivités te...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/rennes-ville-et-metropole-publie-son-rapport-sur-lintelligence-artificielle-generative-iag/" data-title="Rennes, ville et métropole publie son rapport sur l'intelligence artificielle générative (IAG)" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Rennes, ville et métropole publie son rapport sur l'intelligence artificielle générative (IAG)</h3>
+          <p>Résumé : En tant que service public, une collectivité part le plus souvent des besoins usagers pour ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/gouvernance-des-epci-les-instances-politiques-de-lintercommunalite/" data-title="Gouvernance des EPCI : Les instances politiques de l’intercommunalité" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Gouvernance des EPCI : Les instances politiques de l’intercommunalité</h3>
+          <p>Résumé : Les intercommunalités disposent de plus ou moins de liberté dans l’organisation de leurs in...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/place-aux-solutions-fondees-sur-la-nature/" data-title="Place aux Solutions Fondées sur la Nature" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Place aux Solutions Fondées sur la Nature</h3>
+          <p>Résumé : Les Solutions fondées sur la Nature (SfN) pour l’adaptation au changement climatique consis...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/cartographie-des-formations-et-ressources-pedagogiques-sur-la-transition-ecologique/" data-title="Cartographie des formations et ressources pédagogiques sur la transition écologique" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Cartographie des formations et ressources pédagogiques sur la transition écologique</h3>
+          <p>Résumé : Cette deuxième édition est réalisée deux ans après la publication de la première (mars 2023...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/les-politiques-publiques-de-sante-environnementale/" data-title="Les politiques publiques de santé environnementale" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Les politiques publiques de santé environnementale</h3>
+          <p>Résumé : Longtemps marginalisée, la santé environnementale s’impose aujourd’hui comme un enjeu centr...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/comment-les-personnes-vulnerables-sont-ecolos-sans-le-dire/" data-title="L’écologie du quotidien – Ou comment les personnes vulnérables sont écolos sans le dire" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>L’écologie du quotidien – Ou comment les personnes vulnérables sont écolos sans le dire</h3>
+          <p>Résumé : Cette étude réalisée par Emmaüs, Fondation Jean-Jaurès et La Fabrique écologique analyse et...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/un-portail-d-acces-aux-projets-de-la-transition-ecologique-et-sociale/" data-title="Un portail d’accès aux projets de la transition écologique et sociale !" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Un portail d’accès aux projets de la transition écologique et sociale !</h3>
+          <p>Résumé : Recherchez, géolocalisez, filtrez et trouvez l’alternative qui vous intéresse parmi 40 000 ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/pourquoi-les-elections-municipales-2026-sont-cruciales-pour-l-ecologie/" data-title="Pourquoi les élections municipales 2026 sont cruciales pour l’écologie" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Pourquoi les élections municipales 2026 sont cruciales pour l’écologie</h3>
+          <p>Résumé : Dans un article paru le 28 octobre 2025, le site Bonpote.com, Mathieu Brand présente les po...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/liste-et-cartographie-des-experiences-territoires-conseils/" data-title="Liste et cartographie des expériences Territoires Conseils" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Liste et cartographie des expériences Territoires Conseils</h3>
+          <p>Résumé : Territoires Conseils est un service mis en place par la Banque des Territoires s’adresse au...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/administration-territoriale-en-transition/" data-title="Administration territoriale en transition" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Administration territoriale en transition</h3>
+          <p>Résumé : Ce document est à la fois un recueil d’exemples inspirants et un outil stratégique pour les...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/habiter-les-villages-le-defi-du-bati/" data-title="Habiter les villages : le défi du bâti" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Habiter les villages : le défi du bâti</h3>
+          <p>Résumé : Le parc de logements ruraux est vieillissant, souvent vacant, mal adapté aux usages actuels...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/pour-une-intercommunalite-de-la-confiance-au-service-des-territoires/" data-title="Pour une intercommunalité de la confiance, au service des territoires" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Pour une intercommunalité de la confiance, au service des territoires</h3>
+          <p>Résumé : Héritières des 44 000 paroisses d’avant 1789, les quelque 35 000 communes de France ont, de...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/agir-pour-la-transition-energetique-et-climatique-de-son-territoire/" data-title="Agir pour la transition énergétique et climatique de son territoire" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Agir pour la transition énergétique et climatique de son territoire</h3>
+          <p>Résumé : Les élections municipales et communautaires de mars 2026, représenteront un moment-clé, sel...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/villes-moyennes-quels-enjeux-a-lheure-des-transitions/" data-title="Villes moyennes : quels enjeux à l’heure des transitions ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Villes moyennes : quels enjeux à l’heure des transitions ?</h3>
+          <p>Les villes moyennes ont un rôle important à jouer à l’heure des grandes transitions. Elles sont dire...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/les-metamorphoses-pour-un-projet-ecologique-et-solidaire-dadaptation-au-changement-climatique/" data-title="Les Métamorphoses : Pour un projet écologique et solidaire d'adaptation au changement climatique" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Les Métamorphoses : Pour un projet écologique et solidaire d'adaptation au changement climatique</h3>
+          <p>Résumé : Nous vous recommandons la lecture de cet essai qui dresse un état des lieux de l’adaptation...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/comment-partager-leau-en-france/" data-title="Comment partager l'eau en France ?" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Comment partager l'eau en France ?</h3>
+          <p>Résumé : Depuis de nombreuses années, la France a instauré des politiques de gestion de l’eau visant...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/loi-climat-resilience-guide-a-lusage-des-collectivites-territoriales/" data-title="Loi Climat & Résilience : Guide à l'usage des collectivités territoriales" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Loi Climat & Résilience : Guide à l'usage des collectivités territoriales</h3>
+          <p>Résumé : La loi du 22 août 2021 portant lutte contre le dérèglement climatique et renforcement de la...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/conseils-municipaux-renouer-avec-lengagement-citoyen/" data-title="Conseils municipaux: renouer avec l’engagement citoyen" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Conseils municipaux: renouer avec l’engagement citoyen</h3>
+          <p>Résumé : Un pilier démocratique fragilisé La commune occupe une place centrale dans la vie démocrati...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/budget-2026-rebatir-un-climat-de-confiance-entre-letat-et-les-collectivites-locales/" data-title="Budget 2026 : rebâtir un climat de confiance entre l’État et les collectivités locales" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Budget 2026 : rebâtir un climat de confiance entre l’État et les collectivités locales</h3>
+          <p>Résumé : Contraint de réduire son déficit, l’État regarde du côté des collectivités territoriales et...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/a-lheure-de-la-transition-ecologique/" data-title="A l'heure de la transition écologique" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>A l'heure de la transition écologique</h3>
+          <p>Résumé : Comment les collectivités territoriales font-elles face aux défis environnementaux ? Quels ...</p>
+        </div>
+        <div class="item-card" data-url="https://solutionstransitions.fr/politique-confidentialite" data-title="Politique de confidentialité" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>Politique de confidentialité</h3>
+          <p>L’adresse de notre site est : https://solutionstransitions.fr. Le site https://solutionstransitions....</p>
+        </div>
       </div>
     </aside>
 
