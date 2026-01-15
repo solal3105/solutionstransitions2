@@ -154,50 +154,157 @@ def simple_stem(word: str) -> str:
     return word
 
 
-def find_relevant_docs(question: str, top_k: int = 5) -> list[dict]:
-    """Renvoie les documents les plus pertinents par simple score de mots-clés."""
-    q_tokens = simple_tokenize(question)
-    q_stems = [simple_stem(t) for t in q_tokens]
-    if not q_tokens:
-        return []
+# Synonymes et termes associés pour améliorer la recherche sémantique
+SYNONYMS = {
+    'financement': ['financer', 'financier', 'budget', 'subvention', 'dotation', 'emprunt', 'dette', 'investissement', 'fonds', 'aides'],
+    'formation': ['former', 'cnfpt', 'compétences', 'apprentissage', 'sensibilisation'],
+    'budget': ['budgétaire', 'finances', 'financier', 'dépenses', 'recettes', 'comptabilité'],
+    'énergie': ['énergétique', 'électricité', 'chauffage', 'rénovation', 'thermique'],
+    'climat': ['climatique', 'carbone', 'émissions', 'ges', 'décarbonation'],
+    'mobilité': ['transport', 'vélo', 'voiture', 'déplacement', 'circulation'],
+    'biodiversité': ['nature', 'espèces', 'écosystème', 'faune', 'flore'],
+    'eau': ['hydraulique', 'assainissement', 'potable', 'aquatique'],
+    'déchet': ['déchets', 'recyclage', 'tri', 'ordures', 'compost'],
+    'bâtiment': ['bâti', 'patrimoine', 'immobilier', 'construction', 'rénovation'],
+}
 
-    scored: list[tuple[float, dict]] = []
+# Mots vides à ignorer dans la recherche
+STOP_WORDS = {
+    'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles',
+    'le', 'la', 'les', 'un', 'une', 'des', 'du', 'de', 'ce', 'cette', 'ces',
+    'mon', 'ton', 'son', 'notre', 'votre', 'leur',
+    'qui', 'que', 'quoi', 'dont', 'où',
+    'et', 'ou', 'mais', 'donc', 'car', 'ni', 'pour', 'par', 'sur', 'sous', 'avec', 'sans', 'dans', 'entre',
+    'être', 'avoir', 'faire', 'pouvoir', 'vouloir', 'devoir', 'savoir', 'aller',
+    'est', 'sont', 'était', 'ont', 'fait', 'peut', 'veut', 'doit', 'sait', 'vais',
+    'plus', 'moins', 'très', 'bien', 'tout', 'tous', 'toute', 'toutes',
+    'comment', 'pourquoi', 'quand', 'combien',
+    'sujet', 'sujets', 'thème', 'thèmes', 'proposer', 'aide', 'aider',
+}
+
+# SEUIL DE PERTINENCE MINIMUM
+MIN_RELEVANCE_SCORE = 8
+
+
+def expand_query(tokens: list[str]) -> list[str]:
+    """Expansion de la requête avec les synonymes."""
+    expanded = set(tokens)
+    for tok in tokens:
+        stem = simple_stem(tok)
+        for key, synonyms in SYNONYMS.items():
+            if key == tok or simple_stem(key) == stem or any(s == tok or simple_stem(s) == stem for s in synonyms):
+                expanded.add(key)
+                expanded.update(synonyms)
+    return list(expanded)
+
+
+def filter_stop_words(tokens: list[str]) -> list[str]:
+    """Filtrer les mots vides."""
+    return [t for t in tokens if t not in STOP_WORDS and len(t) > 2]
+
+
+def count_occurrences(token: str, text_tokens: list[str], text_stems: list[str]) -> int:
+    """Compter les occurrences d'un token dans un texte."""
+    stem = simple_stem(token)
+    count = 0
+    for i, t in enumerate(text_tokens):
+        if t == token or text_stems[i] == stem:
+            count += 1
+    return count
+
+
+def find_relevant_docs(question: str, top_k: int = 5) -> dict:
+    """Renvoie les documents les plus pertinents avec seuil de pertinence."""
+    q_tokens = filter_stop_words(simple_tokenize(question))
+    if not q_tokens:
+        return {"docs": [], "has_relevant_results": False, "top_score": 0}
+    
+    # Expansion avec synonymes
+    expanded_tokens = expand_query(q_tokens)
+    
+    scored: list[dict] = []
     for doc in ALL_DOCS:
         doc_tokens = simple_tokenize(doc["text"])
         doc_stems = [simple_stem(t) for t in doc_tokens]
         title_tokens = simple_tokenize(doc.get("title", ""))
         title_stems = [simple_stem(t) for t in title_tokens]
+        resume_tokens = simple_tokenize(doc.get("resume", ""))
+        resume_stems = [simple_stem(t) for t in resume_tokens]
+        
         if not doc_tokens:
             continue
         
         score = 0.0
+        title_matches = 0
+        resume_matches = 0
         
-        # Bonus pour les fiches (priorité sur les ressources)
+        # Bonus de base pour les fiches
         if doc.get("type") == "fiche":
-            score += 3.0
+            score += 2.0
         
-        for i, tok in enumerate(q_tokens):
-            stem = q_stems[i]
+        # Scoring pour chaque token de la requête ORIGINALE (priorité haute)
+        for tok in q_tokens:
+            stem = simple_stem(tok)
             
-            # Match exact dans le titre : +5
+            # Match exact dans le titre : TRÈS IMPORTANT (+15)
             if tok in title_tokens:
-                score += 5.0
-            # Match stem dans le titre : +3
-            elif any(ts == stem or stem in ts or ts in stem for ts in title_stems):
-                score += 3.0
+                score += 15.0
+                title_matches += 1
+            # Match stem dans le titre : +10
+            elif any(ts == stem for ts in title_stems):
+                score += 10.0
+                title_matches += 1
             
-            # Match exact dans le texte : +2
-            if tok in doc_tokens:
+            # Match exact dans le résumé : +8
+            if tok in resume_tokens:
+                score += 8.0
+                resume_matches += 1
+            # Match stem dans le résumé : +5
+            elif any(rs == stem for rs in resume_stems):
+                score += 5.0
+                resume_matches += 1
+            
+            # Match dans le contenu avec comptage de densité
+            occurrences = count_occurrences(tok, doc_tokens, doc_stems)
+            if occurrences > 0:
+                density = (occurrences / len(doc_tokens)) * 1000
+                score += min(density * 2, 6)  # Plafonné à 6 points
+        
+        # Scoring pour tokens EXPANDUS (synonymes) - bonus moindre
+        for tok in expanded_tokens:
+            if tok in q_tokens:
+                continue  # Déjà compté
+            stem = simple_stem(tok)
+            
+            if tok in title_tokens or any(ts == stem for ts in title_stems):
+                score += 3.0
+            if tok in resume_tokens or any(rs == stem for rs in resume_stems):
                 score += 2.0
-            # Match stem dans le texte : +1
-            elif any(ds == stem or stem in ds or ds in stem for ds in doc_stems):
-                score += 1.0
+        
+        # Bonus si TOUS les mots-clés importants sont présents dans le titre ou résumé
+        if q_tokens and title_matches >= len(q_tokens):
+            score += 10.0  # Bonus de cohérence thématique
+        if q_tokens and (title_matches + resume_matches) >= len(q_tokens):
+            score += 5.0
         
         if score > 0:
-            scored.append((score, doc))
-
-    scored.sort(key=lambda x: x[0], reverse=True)
-    return [doc for _score, doc in scored[:top_k]]
+            scored.append({"score": score, "doc": doc, "title_matches": title_matches})
+    
+    scored.sort(key=lambda x: x["score"], reverse=True)
+    
+    # Filtrer par seuil de pertinence minimum
+    relevant_docs = [s for s in scored if s["score"] >= MIN_RELEVANCE_SCORE]
+    
+    # Log pour debug
+    print(f"[app.py] Query tokens: {q_tokens}")
+    print(f"[app.py] Top scores: {[(s['doc']['title'][:40], s['score']) for s in scored[:5]]}")
+    print(f"[app.py] Docs above threshold ({MIN_RELEVANCE_SCORE}): {len(relevant_docs)}")
+    
+    return {
+        "docs": [s["doc"] for s in relevant_docs[:top_k]],
+        "has_relevant_results": len(relevant_docs) > 0,
+        "top_score": scored[0]["score"] if scored else 0
+    }
 
 
 @app.route("/")
@@ -227,7 +334,9 @@ def chat():
     search_query = " ".join(
         [h.get("content", "") for h in history if h.get("role") == "user"] + [message]
     )
-    relevant_docs = find_relevant_docs(search_query, top_k=5)
+    search_result = find_relevant_docs(search_query, top_k=5)
+    relevant_docs = search_result["docs"]
+    has_relevant_results = search_result["has_relevant_results"]
 
     context_parts: list[str] = []
     sources: list[dict] = []
@@ -244,22 +353,36 @@ def chat():
             }
         )
 
-    context = "\n\n".join(context_parts) if context_parts else "(aucun contexte trouvé dans les documents)"
+    # Construire le contexte en fonction de la pertinence
+    relevance_note = ""
+    if not has_relevant_results:
+        context = "(AUCUN DOCUMENT PERTINENT TROUVÉ - voir instructions ci-dessous)"
+        relevance_note = """
 
-    system_prompt = """Tu es un assistant pour le site Solutions Transitions, destiné aux élus, agents territoriaux et acteurs locaux.
+⚠️ IMPORTANT : Aucune fiche ou ressource ne correspond précisément à cette demande.
+Tu DOIS :
+1. Indiquer clairement à l'utilisateur que tu n'as pas trouvé de contenu directement lié à sa demande
+2. Lui proposer de préciser sa recherche avec des exemples concrets de ce qu'il cherche
+3. Suggérer des thèmes connexes disponibles sur le site (budget, énergie, mobilité, biodiversité, climat, etc.)
+4. NE PAS proposer de fiches non pertinentes juste pour 'donner quelque chose'"""
+    else:
+        context = "\n\n".join(context_parts)
+
+    system_prompt = f"""Tu es un assistant pour le site Solutions Transitions, destiné aux élus, agents territoriaux et acteurs locaux.
 
 RÈGLES STRICTES :
 1. Tu ne dois JAMAIS inventer de fiches ou ressources. Tu ne peux mentionner QUE les documents fournis dans le contexte ci-dessous.
 2. Quand tu mentionnes une fiche ou ressource, tu DOIS inclure son URL exacte entre parenthèses, comme ceci : "**Titre de la fiche** (URL)"
 3. Privilégie les FICHES (type=fiche) car elles sont plus complètes et pratiques que les ressources.
-4. Ta priorité est de BIEN COMPRENDRE le besoin. Si la question est large/ambiguë, pose 1 à 2 questions de clarification AVANT de proposer des fiches/ressources. Dans ce cas, ne propose au maximum qu'1 document “le plus probable”.
+4. Ta priorité est de BIEN COMPRENDRE le besoin. Si la question est large/ambiguë, pose 1 à 2 questions de clarification AVANT de proposer des fiches/ressources.
 5. Sois concis : vise 60 à 120 mots maximum, utilise des puces courtes. Évite les longs paragraphes.
 6. Ne fais PAS de suggestions génériques hors du contenu du site. Reste strictement dans le périmètre des documents fournis.
-7. Si aucun document ne correspond à la question, dis-le clairement plutôt que d'inventer.
+7. Si aucun document pertinent n'est fourni dans le contexte, tu DOIS le dire clairement et guider l'utilisateur pour reformuler sa demande. NE PROPOSE PAS de fiches non pertinentes.
+8. QUALITÉ > QUANTITÉ : mieux vaut ne proposer qu'une seule fiche très pertinente que plusieurs fiches moyennement liées.
 
 Format de réponse idéal :
-- Si besoin : commence par 1 à 2 questions de clarification
-- Sinon : cite 1 à 3 fiches/ressources pertinentes avec leur URL et 1 phrase de justification chacune"""
+- Si pas de résultat pertinent : explique que tu n'as pas trouvé et guide l'utilisateur
+- Sinon : cite 1 à 3 fiches/ressources VRAIMENT pertinentes avec leur URL et 1 phrase de justification chacune{relevance_note}"""
 
     try:
         # Construire les messages avec l'historique
