@@ -149,63 +149,6 @@
       box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
     }
 
-    /* Section des citations */
-    .cited-section {
-      border-bottom: 1px solid var(--border);
-      padding: 0.75rem;
-      background: linear-gradient(to bottom, rgba(245, 158, 11, 0.08), transparent);
-      display: none;
-    }
-
-    .cited-section.has-items {
-      display: block;
-    }
-
-    .cited-section-title {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--warning);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.375rem;
-    }
-
-    .cited-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.375rem;
-    }
-
-    .cited-item {
-      padding: 0.5rem 0.75rem;
-      background: white;
-      border: 1px solid var(--warning);
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .cited-item:hover {
-      background: rgba(245, 158, 11, 0.1);
-    }
-
-    .cited-item-icon {
-      font-size: 1rem;
-    }
-
-    .cited-item-title {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
 
     /* Liste des fiches/ressources */
     .items-list {
@@ -415,89 +358,107 @@
     .source-chip {
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-      padding: 0.25rem 0.625rem;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
       background: white;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      font-size: 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
       color: var(--text);
       text-decoration: none;
-      margin: 0.125rem;
+      margin: 0.25rem 0.25rem 0.25rem 0;
       transition: all 0.2s;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .source-chip:hover {
       border-color: var(--primary);
       background: rgba(15, 118, 110, 0.05);
-    }
-
-    .source-chip-icon { font-size: 0.85rem; }
-
-    /* Source preview cards */
-    .source-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .source-card {
-      display: block;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      background: white;
-      border-radius: 12px;
-      padding: 0.5rem 0.6rem;
-      transition: border-color 0.2s, box-shadow 0.2s, transform 0.1s;
-    }
-
-    .source-card:hover {
-      border-color: var(--primary);
-      box-shadow: var(--shadow);
       transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .source-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin-bottom: 0.2rem;
-    }
-
-    .source-card-title {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-    }
-
-    .source-card-badge {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      padding: 0.15rem 0.45rem;
-      border-radius: 999px;
-      color: white;
+    .source-chip-icon { 
+      font-size: 1rem;
       flex-shrink: 0;
     }
 
-    .source-card-badge.fiche { background: var(--primary); }
-    .source-card-badge.ressource { background: var(--secondary); }
+    .source-chip-title {
+      font-weight: 500;
+    }
 
-    .source-card-excerpt {
-      font-size: 0.74rem;
-      color: var(--text-light);
+    /* Tooltip pour les sources */
+    .source-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      z-index: 1000;
+      min-width: 300px;
+      max-width: 400px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .source-chip:hover .source-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .source-tooltip-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
       line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    }
+
+    .source-tooltip-resume {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .source-tooltip-arrow {
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    /* Reset button */
+    .reset-btn {
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .reset-btn:hover {
+      background: var(--bg);
+      border-color: var(--primary);
     }
 
     /* Input Area */
@@ -626,15 +587,6 @@
       .sidebar { max-height: 350px; }
       .chat-area { min-height: 500px; }
     }
-
-    /* Loading state for sidebar */
-    .loading-sidebar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      color: var(--text-light);
-    }
   </style>
 </head>
 <body>
@@ -643,24 +595,19 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2>📚 Base de connaissances</h2>
-        <p id="sidebar-stats">Chargement...</p>
+        <p>{{ fiches|length }} fiches · {{ ressources|length }} ressources</p>
       </div>
       
       <!-- Tabs Switch -->
       <div class="sidebar-tabs">
         <button class="sidebar-tab active" data-tab="fiches">
-          📄 Fiches<span class="tab-count" id="fiches-count">-</span>
+          📄 Fiches<span class="tab-count">{{ fiches|length }}</span>
         </button>
         <button class="sidebar-tab" data-tab="ressources">
-          📚 Ressources<span class="tab-count" id="ressources-count">-</span>
+          📚 Ressources<span class="tab-count">{{ ressources|length }}</span>
         </button>
       </div>
 
-      <!-- Section Citations -->
-      <div class="cited-section" id="cited-section">
-        <div class="cited-section-title">⭐ Cités dans la conversation</div>
-        <div class="cited-list" id="cited-list"></div>
-      </div>
 
       <div class="sidebar-search">
         <input type="text" id="item-search" placeholder="Rechercher...">
@@ -668,12 +615,24 @@
 
       <!-- Liste Fiches -->
       <div class="items-list" id="fiches-list">
-        <div class="loading-sidebar">Chargement des fiches...</div>
+        {% for fiche in fiches %}
+        <div class="item-card" data-url="{{ fiche.url }}" data-title="{{ fiche.title }}" data-type="fiche">
+          <span class="item-tag fiche">Fiche</span>
+          <h3>{{ fiche.title }}</h3>
+          <p>{{ fiche.resume[:100] }}{% if fiche.resume|length > 100 %}...{% endif %}</p>
+        </div>
+        {% endfor %}
       </div>
 
       <!-- Liste Ressources -->
       <div class="items-list" id="ressources-list" style="display: none;">
-        <div class="loading-sidebar">Chargement des ressources...</div>
+        {% for ressource in ressources %}
+        <div class="item-card" data-url="{{ ressource.url }}" data-title="{{ ressource.title }}" data-type="ressource">
+          <span class="item-tag ressource">Ressource</span>
+          <h3>{{ ressource.title }}</h3>
+          <p>{{ ressource.resume[:100] }}{% if ressource.resume|length > 100 %}...{% endif %}</p>
+        </div>
+        {% endfor %}
       </div>
     </aside>
 
@@ -685,6 +644,9 @@
           <h1>Assistant Solutions Transitions</h1>
           <p>Posez vos questions sur la transition écologique des collectivités</p>
         </div>
+        <button class="reset-btn" id="reset-btn" title="Réinitialiser la conversation">
+          🔄 Nouvelle conversation
+        </button>
       </header>
 
       <div class="chat-messages" id="chat-messages">
@@ -709,7 +671,7 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const input = document.getElementById('chat-input');
       const sendBtn = document.getElementById('chat-send');
       const messagesContainer = document.getElementById('chat-messages');
@@ -718,73 +680,9 @@
       const ressourcesList = document.getElementById('ressources-list');
       const tabs = document.querySelectorAll('.sidebar-tab');
       const suggestionBtns = document.querySelectorAll('.suggestion-btn');
-      const citedSection = document.getElementById('cited-section');
-      const citedList = document.getElementById('cited-list');
-      const sidebarStats = document.getElementById('sidebar-stats');
-      const fichesCount = document.getElementById('fiches-count');
-      const ressourcesCount = document.getElementById('ressources-count');
-
+      const resetBtn = document.getElementById('reset-btn');
       let conversationHistory = [];
-      let citedItems = new Map();
       let currentTab = 'fiches';
-      let fichesData = [];
-      let ressourcesData = [];
-
-      // Charger les données JSON
-      async function loadData() {
-        try {
-          const [fichesResp, ressourcesResp] = await Promise.all([
-            fetch('/doc/fiches.json'),
-            fetch('/doc/ressources.json')
-          ]);
-          
-          if (fichesResp.ok) {
-            fichesData = await fichesResp.json();
-          }
-          if (ressourcesResp.ok) {
-            ressourcesData = await ressourcesResp.json();
-          }
-
-          // Mettre à jour les compteurs
-          fichesCount.textContent = fichesData.length;
-          ressourcesCount.textContent = ressourcesData.length;
-          sidebarStats.textContent = `${fichesData.length} fiches · ${ressourcesData.length} ressources`;
-
-          // Rendre les listes
-          renderList(fichesList, fichesData, 'fiche');
-          renderList(ressourcesList, ressourcesData, 'ressource');
-
-        } catch (err) {
-          console.error('Erreur chargement données:', err);
-          sidebarStats.textContent = 'Erreur de chargement';
-        }
-      }
-
-      function renderList(container, items, type) {
-        container.innerHTML = '';
-        items.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'item-card';
-          card.dataset.url = item.url;
-          card.dataset.title = item.title;
-          card.dataset.type = type;
-          
-          const resume = item.resume || '';
-          const shortResume = resume.length > 100 ? resume.substring(0, 100) + '...' : resume;
-          
-          card.innerHTML = `
-            <span class="item-tag ${type}">${type === 'fiche' ? 'Fiche' : 'Ressource'}</span>
-            <h3>${escapeHtml(item.title)}</h3>
-            <p>${escapeHtml(shortResume)}</p>
-          `;
-          
-          card.addEventListener('click', () => window.open(item.url, '_blank'));
-          container.appendChild(card);
-        });
-      }
-
-      // Charger les données au démarrage
-      await loadData();
 
       // Tab switching
       tabs.forEach(tab => {
@@ -807,6 +705,13 @@
         });
       });
 
+      // Click on item card
+      document.querySelectorAll('.item-card').forEach(card => {
+        card.addEventListener('click', function() {
+          window.open(this.dataset.url, '_blank');
+        });
+      });
+
       // Suggestions
       suggestionBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -815,38 +720,31 @@
         });
       });
 
-      // Update cited section
-      function updateCitedSection(sources) {
-        if (!Array.isArray(sources)) return;
-        
-        sources.forEach(s => {
-          if (s.url && s.title) {
-            citedItems.set(s.url, { title: s.title, type: s.type || 'fiche' });
-          }
-        });
-
-        if (citedItems.size > 0) {
-          citedSection.classList.add('has-items');
-          citedList.innerHTML = '';
-          citedItems.forEach((item, url) => {
-            const div = document.createElement('div');
-            div.className = 'cited-item';
-            div.innerHTML = `
-              <span class="cited-item-icon">${item.type === 'fiche' ? '📄' : '📚'}</span>
-              <span class="cited-item-title">${escapeHtml(item.title)}</span>
-            `;
-            div.addEventListener('click', () => window.open(url, '_blank'));
-            citedList.appendChild(div);
-          });
-
-          // Highlight in lists
-          document.querySelectorAll('.item-card').forEach(card => {
-            if (citedItems.has(card.dataset.url)) {
-              card.classList.add('highlighted');
-            }
+      // Reset conversation
+      resetBtn.addEventListener('click', function() {
+        if (confirm('Voulez-vous vraiment réinitialiser la conversation ?')) {
+          conversationHistory = [];
+          messagesContainer.innerHTML = `
+            <div class="welcome-message">
+              <h2>👋 Bienvenue !</h2>
+              <p>Je vous oriente vers les fiches et ressources pertinentes du site.<br>L'assistant garde en mémoire vos 3 derniers échanges.</p>
+              <div class="welcome-suggestions">
+                <button class="suggestion-btn" data-question="Comment se former sur les enjeux de transition écologique ?">Se former aux transitions</button>
+                <button class="suggestion-btn" data-question="Comment financer la transition écologique de ma collectivité ?">Financer la transition</button>
+                <button class="suggestion-btn" data-question="Comment lutter contre la précarité énergétique ?">Précarité énergétique</button>
+              </div>
+            </div>
+          `;
+          // Re-bind suggestion buttons
+          messagesContainer.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+              input.value = this.dataset.question;
+              sendMessage();
+            });
           });
         }
-      }
+      });
+
 
       async function sendMessage() {
         const text = (input.value || '').trim();
@@ -879,7 +777,11 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
         try {
-          const resp = await fetch('/.netlify/functions/chat', {
+          const chatEndpoint = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? '/chat' 
+            : '/.netlify/functions/chat';
+
+          const resp = await fetch(chatEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: text, history: conversationHistory })
@@ -893,9 +795,6 @@
 
           loadingMsg.remove();
 
-          // Update cited items
-          updateCitedSection(data.sources);
-
           const assistantMsg = document.createElement('div');
           assistantMsg.className = 'message assistant';
           
@@ -904,23 +803,17 @@
             sourcesHtml = `
               <div class="sources-inline">
                 <div class="sources-inline-title">📎 Sources consultées</div>
-                <div class="source-cards">
-                  ${data.sources.map(s => {
-                    const excerpt = (s.resume || '').trim();
-                    const safeExcerpt = excerpt ? escapeHtml(excerpt) : 'Voir le contenu sur le site.';
-                    const badgeClass = (s.type === 'fiche' ? 'fiche' : 'ressource');
-                    const badgeLabel = (s.type === 'fiche' ? 'Fiche' : 'Ressource');
-                    return `
-                      <a href="${s.url}" target="_blank" rel="noopener" class="source-card">
-                        <div class="source-card-header">
-                          <div class="source-card-title">${escapeHtml(s.title || 'Document')}</div>
-                          <div class="source-card-badge ${badgeClass}">${badgeLabel}</div>
-                        </div>
-                        <div class="source-card-excerpt">${safeExcerpt}</div>
-                      </a>
-                    `;
-                  }).join('')}
-                </div>
+                ${data.sources.map(s => `
+                  <a href="${s.url}" target="_blank" rel="noopener" class="source-chip">
+                    <span class="source-chip-icon">${s.type === 'fiche' ? '📄' : '📚'}</span>
+                    <span class="source-chip-title">${escapeHtml(s.title)}</span>
+                    <div class="source-tooltip">
+                      <div class="source-tooltip-title">${escapeHtml(s.title)}</div>
+                      <div class="source-tooltip-resume">${escapeHtml((s.resume || 'Aucun résumé disponible').substring(0, 300))}${(s.resume || '').length > 300 ? '...' : ''}</div>
+                      <div class="source-tooltip-arrow"></div>
+                    </div>
+                  </a>
+                `).join('')}
               </div>
             `;
           }
